@@ -121,50 +121,6 @@
      firebase.initializeApp(firebaseConfig);
      const db = firebase.firestore();
 
-  // Obter elementos para o upload
-    var uploader = document.getElementById('uploader');
-    var fileButton = document.getElementById('fileButton');
-    // Evento que monitora os eventos do botao de upload
-    fileButton.addEventListener('change', function(e) {
-        // obter arquivo
-        var file = e.target.files[0];
-        file.name = document.getElementById("fileButton").value = this.value.substring(12);
-        console.log(file.name);
-        // Create the file metadata
-        var metadata = {
-            contentType: 'image/jpeg'
-        };
-        var storageRef = firebase.storage().ref();
-        var uploadTask = storageRef.child('images/' + file.name).put(file, metadata);
-        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
-            function(snapshot) {
-                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');
-                switch (snapshot.state) {
-                    case firebase.storage.TaskState.PAUSED: // or 'paused'
-                        console.log('Upload is paused');
-                        break;
-                    case firebase.storage.TaskState.RUNNING: // or 'running'
-                        console.log('Upload is running');
-                        break;
-                }
-            },
-            function(error) {
-                switch (error.code) {
-                    case 'storage/unauthorized':
-                        break;
-                    case 'storage/canceled':
-                        break;
-                    case 'storage/unknown':
-                        break;
-                }
-            },
-            function() {
-                uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                    console.log('File available at', downloadURL);
-                });
-            });
-    });
     </script>
       
       <script type="text/javascript" src="./js/materialize.min.js"></script>
