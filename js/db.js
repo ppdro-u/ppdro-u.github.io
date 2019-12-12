@@ -15,6 +15,7 @@ db.collection('pesquisa_emprego').onSnapshot(snapshot => {
             desenhaCard(change.doc.data(), change.doc.id);
         }
         if (change.type === 'removed') {
+            removeCard(change.doc.id);
             // remover da pagina tambem
         }
     });
@@ -26,18 +27,27 @@ form.addEventListener('submit', evt => {
     evt.preventDefault();
 
     const pesquisa_emprego = {
-        nome: form.pesquisa_empregoTitulo.value,
-        descricao: form.pesquisa_empregoDescricao.value,
-        link: form.pesquisa_empregoLink.value,
-        endereco_imagem: form.pesquisa_empregoArquivo.value
+        email: form.email.value,
+        nome: form.nome.value,
+        profissão: form.profissão.value
     };
 
     db.collection('pesquisa_emprego').add(pesquisa_emprego)
         .catch(err => console.log(err));
 
     //reseta o formulario
-    form.pesquisa_empregoTitulo.value = '';
-    form.pesquisa_empregoDescricao.value = '';
-    form.pesquisa_empregoArquivo.value = '';
+    form.email.value = '';
+    form.nome.value = '';
+    form.profissão.value = '';
 
 });
+
+ //remove a recipe
+const empregos1 = document.querySelector('.empŕegos');
+empregos1.addEventListener('click', evt => {
+  if(evt.target.tagName === 'I'){
+    const id = evt.target.getAttribute('data-id');
+    //console.log(id);
+    db.collection('empregos').doc(id).delete();
+  }
+})
